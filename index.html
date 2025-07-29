@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Custom T-Shirt Builder</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #f7f7f7; }
+    canvas { border: 1px solid #ccc; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Design Your Shirt</h1>
+  <canvas id="shirt" width="400" height="500"></canvas>
+  <br/>
+  <button onclick="addText()">Add Text</button>
+  <input type="file" id="upload" />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.6.0/fabric.min.js"></script>
+  <script>
+    const canvas = new fabric.Canvas('shirt');
+    fabric.Image.fromURL('https://i.imgur.com/UjL5O25.png', function(img) {
+      img.scaleToWidth(400);
+      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+    });
+
+    function addText() {
+      const text = new fabric.Textbox('Custom Text', {
+        left: 50, top: 100, width: 300, fontSize: 24
+      });
+      canvas.add(text);
+    }
+
+    document.getElementById('upload').addEventListener('change', function(e) {
+      const reader = new FileReader();
+      reader.onload = function(f) {
+        fabric.Image.fromURL(f.target.result, function(img) {
+          img.scaleToWidth(150);
+          canvas.add(img);
+        });
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    });
+  </script>
+</body>
+</html>
